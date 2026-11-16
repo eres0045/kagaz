@@ -100,3 +100,113 @@ depends on it.
 - Demo video (90s): Wi-Fi-off extraction on the laptop, redaction view,
   engine chips, dossier. Record only after Nano is verified.
 - Pre-submit checkpoint → submit by Nov 30, 2:00 PM PT.
+
+---
+
+# Kagaz — Day 2 progress notes (2026-11-16, IST)
+
+## 1. Devpost rules re-check (live, 2026-11-16 ~10:15 UTC)
+
+Page https://firebasehybridaihackathon.devpost.com/ is now fully live
+(no longer pre-launch). What changed vs the Nov 12 summary:
+
+- **Prize conflict RESOLVED — $30,000 confirmed** on the official page:
+  Grand $10,000 · 1st Runner Up $7,000 · 2nd Runner Up $4,000 ·
+  Best iOS $3,000 · Best Android $3,000 · Best Web/Chrome $3,000.
+  Winners also get a Firebase-team interview + featured blog post
+  (Grand + 1st Runner Up) and social mentions.
+- **Judging criteria (as published — supersedes the Nov 12 summary):**
+  (1) Technological Implementation — how well the project uses Firebase
+  AI Logic hybrid inference; (2) Design — a complete, coherent product
+  experience, not just a proof of concept; (3) Potential Impact —
+  credible, specific case for a real problem for a real audience;
+  (4) Quality of the Idea — creative, non-obvious use of Firebase AI
+  Logic. No separate "architectural rationale" criterion is listed.
+- **Deliverables confirmed:** working app (hosted URL strongly
+  encouraged) + public repo with an open-source license detectable at
+  the top of the repo (MIT LICENSE now committed — see below) + demo
+  video ≤3 min, public on YouTube + text description covering Firebase
+  AI Logic use, features, value proposition. Repo must demonstrate
+  Firebase AI Logic **at runtime** (imported and actually called, not
+  just named in the README). Multiple platforms get "strong
+  consideration" for Grand Prize; an outstanding single-platform app
+  can still win. Firebase AI Logic requires App Check; debug tokens
+  are accepted in submissions.
+- **Deadline confirmed:** submissions close Mon Nov 30, 2:00 PM PT
+  (event window ends Nov 30, 5:00 PM ET) = **Tue Dec 1, 03:30 IST**.
+- **Quota Sprints:** Sprint 2 request by Wed Nov 18, 10:00 AM PT,
+  account sent Thu Nov 19; Sprint 3 (final) request by Wed Nov 25,
+  10:00 AM PT, account sent Fri Nov 27. Free tier already covers
+  Kagaz's models — a quota account is only needed for billed
+  image-generation models, which Kagaz does not use.
+- **No "bonus challenges" section** appears on the live page; the Nov 11
+  expectation of separate bonus challenges did not materialise. Nothing
+  to adjust for.
+
+## 2. Day 1 build re-verified — still green
+
+- `npm test`: **50/50 pass** (6 files), ~3s. No breakage, no fixes
+  needed, coverage not lowered.
+- Correction to the Day 1 notes: the per-file breakdown there sums to
+  54, not 50. Actual counts: redact 18 (not 22), extract 9, pipeline
+  6, dossier 7, nano 7, App 3 = 50. Total 50/50 was and is correct;
+  only the redaction count in the notes was wrong.
+- `npm run build`: clean (35 modules, 504ms). Built with
+  `--base=/kagaz/` for the GitHub Pages project-site path.
+
+## 3. Live demo DEPLOYED — GitHub Pages
+
+- URL: **https://eres0045.github.io/kagaz/**
+- Method: `dist/` pushed to orphan `gh-pages` branch (`.nojekyll`
+  included); Pages enabled from that branch, HTTPS enforced.
+  Firebase Hosting was NOT used — it needs a Firebase project, which
+  is a human gate (see below).
+- **Live verification (real Chromium, Playwright, 2026-11-16):**
+  `scripts/smoke-live.py` → **LIVE SMOKE OK, page errors: []**.
+  Verified on the deployed URL: app mounts, demo banner visible,
+  Nano status chip present, sample job offer letter → 9 items
+  redacted, `Demo · local stub` engine chip, `[EMAIL_1]`
+  placeholder shown, real email absent from redacted view, dossier
+  section + checklist present, Original/Redacted toggle restores
+  correctly, on-device-only test fails honestly with
+  `Extraction unavailable`. The deployed demo runs in labelled demo
+  mode (no Firebase config yet) — no live model calls are claimed.
+- Repo: MIT LICENSE committed to master (commit a06f3cb) so the
+  license is detectable at the top of the repo, as Devpost requires.
+  Repo https://github.com/eres0045/kagaz remains public.
+
+## 4. Demo video — script drafted, NOT recorded
+
+- `VIDEO_SCRIPT.md`: 90-second script (5 scenes) — hook, redaction
+  view, Wi-Fi-off on-device extraction, cloud dossier + leak guard,
+  close with demo + repo links. Script only; recording waits for the
+  Nano laptop verification + Firebase live mode (see gates). The
+  script includes an honest fallback: if Nano is not verified by
+  shoot day, film the `Extraction unavailable` + cloud-fallback path
+  and narrate it as such — never fake the offline claim.
+
+## Open human gates (Ronit — nothing else blocks Day 3)
+
+1. **Firebase project + `.env` (~15 min, 007 Google sign-in):**
+   follow `FIREBASE_SETUP.md` — create project `kagaz`, enable AI
+   Logic with the Gemini Developer API (NOT Vertex/billing), register
+   Web app `kagaz-web`, paste config into `.env`, register the App
+   Check debug token, verify the header chip reads
+   `Live · Firebase AI Logic`. Until then the app stays in labelled
+   demo mode and the video cannot be shot as live.
+2. **Laptop Nano verification** (checklist in the Day 1 section
+   above): Chrome v139+ on his own laptop, enable the Prompt API
+   flag, download Nano, confirm the `On-device · Gemini Nano` chip,
+   Wi-Fi-off extraction run. The demo video depends on this.
+3. **Devpost registration** (not done yet): register at
+   https://firebasehybridaihackathon.devpost.com/ before submitting.
+   Nothing submitted; pre-submit checkpoint comes later.
+
+## Next (Day 3+)
+
+- After gate 1: live-mode end-to-end test (extraction + dossier with
+  real models), re-run `smoke-live.py` against the live-mode build.
+- After gate 2: record the 90s demo video per `VIDEO_SCRIPT.md`,
+  upload Unlisted/public to YouTube (007 channel).
+- Pre-submit checkpoint → submit by Nov 30, 2:00 PM PT
+  (Dec 1, 03:30 IST).
